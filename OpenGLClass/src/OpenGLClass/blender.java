@@ -29,7 +29,7 @@ public class blender extends JFrame implements GLEventListener {
 	private FPSAnimator animator;
 	private int kat = 0, owoceKat = 0;
 	private int textureId = 0, skyboxTextureId = 0;
-	private boolean owoceBlend = false;
+	private boolean owoceBlend = false, kameraLewo = false, kameraPrawo = false;
 	private final float CAMERA_DISTANCE = 8.0f;
 	private final String SCIEZKA_OWOCE = "src/OpenGLClass/owoceOpt.jpg";
 	private final String SCIEZKA_DZWIEK = "src/OpenGLClass/blender-mixer-smoothie-33026.wav";
@@ -82,19 +82,37 @@ public class blender extends JFrame implements GLEventListener {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				int keyCode = arg0.getKeyCode();
+				switch (keyCode) {
+				case KeyEvent.VK_SPACE:
 					owoceBlend = false;
 					clip.stop();
 					clip.setFramePosition(0);
+					break;
+				case KeyEvent.VK_A:
+					kameraLewo = false;
+					break;
+				case KeyEvent.VK_D:
+					kameraPrawo = false;
+					break;
 				}
 			}
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				int keyCode = arg0.getKeyCode();
+				switch (keyCode) {
+				case KeyEvent.VK_SPACE:
 					owoceBlend = true;
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
+					break;
+				case KeyEvent.VK_A:
+					kameraLewo = true;
+					break;
+				case KeyEvent.VK_D:
+					kameraPrawo = true;
+					break;
 				}
 			}
 		};
@@ -257,10 +275,12 @@ public class blender extends JFrame implements GLEventListener {
 
 		Walec.DrawTransparent(gl, 0.75f, 3.0f, 16, 2, 0.1f);
 
-		kat += 1.0f;
-		if (kat >= 360.0f) {
-			kat -= 360.0f;
+		if (kameraLewo) kat += 1;
+		if (kameraPrawo) kat -= 1;
+		if (kat >= 360) {
+			kat -= 360;
 		}
+		if (kat < 0) kat = 360;
 
 		if (owoceBlend) {
 			owoceKat += 1.0f;
